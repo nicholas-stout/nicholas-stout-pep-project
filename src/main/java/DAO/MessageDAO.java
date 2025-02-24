@@ -95,15 +95,77 @@ public class MessageDAO {
         return null;
     }
 
+    /**
+     * Method to delete a message by its id
+     * @param message_id the id of the message we wish to delete
+     */
     public void deleteMessageById(int message_id) {
+        // Get new connection
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "DELETE FROM message WHERE message_id=?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, message_id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Method to update a message by its message_id
+     * @param message_id the id of the message we wish to update
+     * @param newMessageText the new text of the message
+     */
+    public void updateMessageById(int message_id, String newMessageText) {
+        // Get new connection
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "UPDATE message SET message_text=? WHERE message_id=?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, newMessageText);
+            preparedStatement.setInt(2, message_id);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * Method to retrieve all messages from a specific user
+     * @param posted_by the id of the user whose messages we want
+     * @return a list of all messages posted by this user
+     */
+    public List<Message> retrieveAllMessagesByUser(int posted_by) {
+        List<Message> messageList = new ArrayList<>();
         
-    }
+        // Get new connection
+        Connection connection = ConnectionUtil.getConnection();
 
-    public Message updateMessageById(int message_id, String newMessageText) {
-        return null;
-    }
+        try {
+            String sql = "SELECT * FROM message WHERE posted_by=?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, posted_by);
 
-    public List<Message> retrieveAllMessagesByUser(int user_id) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                Message message = new Message(
+                    resultSet.getInt("message_id"),
+                    resultSet.getInt("posted_by"),
+                    resultSet.getString("message_text"),
+                    resultSet.getLong("time_posted_epoch")
+                );
+
+                messageList.add(message);
+            }
+
+            return messageList;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
         return null;
     }
 }
