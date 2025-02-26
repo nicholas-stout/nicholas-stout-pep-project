@@ -65,4 +65,32 @@ public class AccountDAO {
 
         return null;
     }
+
+    /**
+     * Method to get an account by its username. This is necessary for the Service layer to verify if an account already exists.
+     * @param username a String representing the username of an account
+     * @return the Account with that username if it exists, null otherwise.
+     */
+    public Account getAccountByUsername(String username) {
+        // Get connection
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "SELECT * FROM account WHERE username=?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setString(1, username);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return new Account(resultSet.getInt("account_id"), resultSet.getString("username"), 
+                    resultSet.getString("password"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        return null;
+    }
 }
