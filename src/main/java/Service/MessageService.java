@@ -32,6 +32,7 @@ public class MessageService {
      * @return the persisted message, if successful, null otherwise
      */
     public Message addMessage(Message message) {
+        
         return null;
     }
 
@@ -91,7 +92,7 @@ public class MessageService {
      * @return true or false based on whether the message is valid
      */
     private boolean isValidMessage(Message message) {
-        return false;    
+        return userExists(message.getPosted_by()) && isValidMessageText(message.getMessage_text());    
     }
 
     /**
