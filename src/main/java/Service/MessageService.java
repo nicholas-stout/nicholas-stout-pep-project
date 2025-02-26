@@ -84,5 +84,34 @@ public class MessageService {
         return null;
     }
 
-    // TODO Add validation methods
+    /**
+     * TODO Add logic
+     * This method will check if a Message object represents a valid message.
+     * A message is valid if it is posted by a real user and its text is not empty and not more than 255 characters.
+     * @param message The message we are validating
+     * @return true or false based on whether the message is valid
+     */
+    private boolean isValidMessage(Message message) {
+        return false;    
+    }
+
+    /**
+     * TODO Add logic
+     * This method will check if the user_id referenced by posted_by exists in the database.
+     * @param posted_by The posted_by attribute of a Message object. It should point to a real user in the account table.
+     * @return true or false depending on whether the user exists
+     */
+    private boolean userExists(int posted_by) {
+        return false;
+    }
+
+    /**
+     * TODO Add logic
+     * This method will check if the message_text of a Message is valid (i.e., it is not empty and not more than 255 characters).
+     * @param message_text The text of the message we wish to validate
+     * @return true or false depending on whether the message_text is valid
+     */
+    private boolean isValidMessageText(String message_text) {
+        return false;
+    }
 }
