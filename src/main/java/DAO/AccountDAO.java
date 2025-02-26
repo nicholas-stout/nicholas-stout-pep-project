@@ -93,4 +93,32 @@ public class AccountDAO {
         
         return null;
     }
+
+    /**
+     * Method to get an Account by its id. This will be necessary for the Message service layer to verify if an account_id exists
+     * @param id An int representing the account_id
+     * @return The Account with the id if it exists, null otherwise.
+     */
+    public Account getAccountById(int account_id) {
+        // Get connection
+        Connection connection = ConnectionUtil.getConnection();
+
+        try {
+            String sql = "SELECT * FROM account WHERE account_id=?;";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+
+            preparedStatement.setInt(1, account_id);
+
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return new Account(resultSet.getInt("account_id"), resultSet.getString("username"),
+                    resultSet.getString("password"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        return null;
+    }
 }
