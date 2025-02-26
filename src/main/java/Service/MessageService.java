@@ -9,7 +9,6 @@ import DAO.AccountDAO;
 
 public class MessageService {
     private MessageDAO messageDAO;
-    private AccountDAO accountDAO = new AccountDAO();
 
     /**
      * Default no-args constructor will initialize messageDAO
@@ -96,22 +95,23 @@ public class MessageService {
     }
 
     /**
-     * TODO Add logic
      * This method will check if the user_id referenced by posted_by exists in the database.
      * @param posted_by The posted_by attribute of a Message object. It should point to a real user in the account table.
      * @return true or false depending on whether the user exists
      */
     private boolean userExists(int posted_by) {
-        return false;
+        // Create AccountDAO object to query the account table
+        AccountDAO accountDAO = new AccountDAO();
+        
+        return (accountDAO.getAccountById(posted_by) != null);
     }
 
     /**
-     * TODO Add logic
      * This method will check if the message_text of a Message is valid (i.e., it is not empty and not more than 255 characters).
      * @param message_text The text of the message we wish to validate
      * @return true or false depending on whether the message_text is valid
      */
     private boolean isValidMessageText(String message_text) {
-        return false;
+        return 0 < message_text.length() && message_text.length() <= 255;
     }
 }
