@@ -4,6 +4,7 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.*;
@@ -64,8 +65,22 @@ public class SocialMediaController {
         }
     }
 
-    private void postLoginHandler(Context ctx) {
+    /**
+     * Handler for the endpoint POST localhost:8080/login. This handler will process logins for users that already exist.
+     * @param ctx Context object for information about HTTP request and response
+     * @throws JsonProcessingException thrown if the JSON cannot be parsed 
+     */
+    private void postLoginHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Account account = mapper.readValue(ctx.body(), Account.class);
+        Account loggedInAccount = accountService.login(account);
 
+        // check if Account was successfully logged in to
+        if (loggedInAccount != null) {
+            ctx.json(loggedInAccount);
+        } else {
+            ctx.status(401);
+        }
     }
 
     private void postMessagesHandler(Context ctx) {
