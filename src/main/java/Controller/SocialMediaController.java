@@ -112,8 +112,17 @@ public class SocialMediaController {
         ctx.json(messages);
     }
 
+    /**
+     * Handler for the endpoint GET localhost:8080/messages/{message_id}. This handler will retrieve a specific message by its message_id.
+     * @param ctx Context object for information about HTTP request and response
+     */
     private void getMessageIdHandler(Context ctx) {
-
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message message = messageService.getMessageById(message_id);
+        
+        if (message != null) {
+            ctx.json(message);
+        }
     }
 
     private void deleteMessageIdHandler(Context ctx) {
