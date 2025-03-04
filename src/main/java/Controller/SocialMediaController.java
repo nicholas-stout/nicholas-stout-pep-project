@@ -27,6 +27,7 @@ public class SocialMediaController {
     public Javalin startAPI() {
         Javalin app = Javalin.create();
         app.get("example-endpoint", this::exampleHandler); // TODO delete line
+        
         app.post("/register", this::postRegisterHandler);
         app.post("/login", this::postLoginHandler);
         app.post("/messages", this::postMessagesHandler);
@@ -83,8 +84,22 @@ public class SocialMediaController {
         }
     }
 
-    private void postMessagesHandler(Context ctx) {
+    /**
+     * Handler for the endpoint POST localhost:8080/messages. This handler will create a new Message and persist it to the database.
+     * @param ctx Context object for information about HTTP request and response
+     * @throws JsonProcessingException thrownn if the JSON cannot be parsed
+     */
+    private void postMessagesHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        Message addedMessage = messageService.addMessage(message);
 
+        // check if Message was successfully added
+        if (addedMessage != null) {
+            ctx.json(addedMessage);
+        } else {
+            ctx.status(400);
+        }
     }
 
     private void getMessagesHandler(Context ctx) {

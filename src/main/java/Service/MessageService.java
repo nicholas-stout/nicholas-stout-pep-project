@@ -32,7 +32,7 @@ public class MessageService {
      */
     public Message addMessage(Message message) {
         // Validate message
-        if (isValidMessage(message)) {
+        if (!isValidMessage(message)) {
             return null;
         }
 
