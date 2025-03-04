@@ -3,8 +3,9 @@ package Controller;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import Model.*;
@@ -102,8 +103,13 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * Handler for the endpoint GET localhost:8080/messages. This handler will retrieve all messages from the database and convert them to JSON.
+     * @param ctx Context object for information about HTTP request and response
+     */
     private void getMessagesHandler(Context ctx) {
-
+        List<Message> messages = messageService.getAllMessages();
+        ctx.json(messages);
     }
 
     private void getMessageIdHandler(Context ctx) {
