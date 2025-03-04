@@ -138,8 +138,23 @@ public class SocialMediaController {
         }
     }
 
-    private void patchMessageIdHandler(Context ctx) {
-
+    /**
+     * Handler for the endpoint PATCH localhost:8080/messages/{message_id}. This handler will update a specific message by its message_id.
+     * @param ctx Context object for information about HTTP request and response
+     * @throws JsonProcessingException thrown if JSON cannot be parsed
+     */
+    private void patchMessageIdHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message updatedMessage = mapper.readValue(ctx.body(), Message.class);
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        updatedMessage = messageService.updateMessageById(message_id, updatedMessage.getMessage_text());
+        
+        // check if Message successfully updated
+        if (updatedMessage != null) {
+            ctx.json(updatedMessage);
+        } else {
+            ctx.status(400);
+        }
     }
 
     private void getAccountIdMessagesHandler(Context ctx) {

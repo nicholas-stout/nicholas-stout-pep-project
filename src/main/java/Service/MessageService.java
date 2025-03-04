@@ -86,7 +86,7 @@ public class MessageService {
         }
 
         // Check if new message text is valid
-        if (isValidMessageText(newMessageText)) {
+        if (!isValidMessageText(newMessageText)) {
             return null;
         }
         
