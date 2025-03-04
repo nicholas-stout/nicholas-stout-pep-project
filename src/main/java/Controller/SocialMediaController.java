@@ -125,8 +125,17 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * Handler for the endpoint DELETE localhost:8080/messages/{message_id}. This handler will delete a specific message by its message_id.
+     * @param ctx Context object for information about HTTP request and response
+     */
     private void deleteMessageIdHandler(Context ctx) {
+        int message_id = Integer.parseInt(ctx.pathParam("message_id"));
+        Message deletedMessage = messageService.deleteMessageById(message_id);
 
+        if (deletedMessage != null) {
+            ctx.json(deletedMessage);
+        }
     }
 
     private void patchMessageIdHandler(Context ctx) {
