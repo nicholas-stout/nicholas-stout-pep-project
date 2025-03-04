@@ -11,11 +11,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import Model.*;
 import Service.*;
 
-/**
- * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
- * found in readme.md as well as the test cases. You should
- * refer to prior mini-project labs and lecture materials for guidance on how a controller may be built.
- */
 public class SocialMediaController {
     private AccountService accountService = new AccountService();
     private MessageService messageService = new MessageService();
@@ -27,7 +22,6 @@ public class SocialMediaController {
      */
     public Javalin startAPI() {
         Javalin app = Javalin.create();
-        app.get("example-endpoint", this::exampleHandler); // TODO delete line
         
         app.post("/register", this::postRegisterHandler);
         app.post("/login", this::postLoginHandler);
@@ -39,14 +33,6 @@ public class SocialMediaController {
         app.get("/accounts/{account_id}/messages", this::getAccountIdMessagesHandler);
 
         return app;
-    }
-
-    /**
-     * This is an example handler for an example endpoint.
-     * @param context The Javalin Context object manages information about both the HTTP request and response.
-     */
-    private void exampleHandler(Context context) {
-        context.json("sample text");
     }
 
     /**
@@ -157,7 +143,13 @@ public class SocialMediaController {
         }
     }
 
+    /**
+     * Handler for the endpoint GET localhost:8080/accounts/{account_id}/messages. This handler will retrieve all messages from a specific user.
+     * @param ctx Context object for information about HTTP request and response
+     */
     private void getAccountIdMessagesHandler(Context ctx) {
-
+        int account_id = Integer.parseInt(ctx.pathParam("account_id"));
+        List<Message> accountMessages = messageService.getAllMessagesByUser(account_id);
+        ctx.json(accountMessages);
     }
 }
